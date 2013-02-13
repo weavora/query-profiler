@@ -16,157 +16,10 @@
     <script src="app/Connection.js"></script>
     <script src="app/Query.js"></script>
     <script src="app/QueryProfile.js"></script>
-    <script src="app.js"></script>
+    <script src="app/Application.js"></script>
+    <script src="bootstrap.js"></script>
 
-    <style>
-
-        * {
-            font-family: Arial;
-        }
-
-        .btn {
-            font-size: 12px;
-            text-decoration: none;
-            border: 1px solid #ccc;
-            padding: 3px 10px;
-            color: #000;
-            background: #eee;
-        }
-
-        .container {
-
-        }
-
-        .container .toolbar {
-            float: left;
-            width: 200px;
-            padding: 10px;
-            border: 1px dashed #ccc;
-        }
-
-        .container .toolbar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .container .toolbar ul li {
-            padding: 2px 3px;
-        }
-
-        .container .toolbar ul li.active {
-            background-color: #eee;
-        }
-
-        .container .toolbar ul a {
-            font-size: 13px;
-            text-decoration: none;
-            color: #525c66;
-        }
-
-        .container .toolbar .note {
-            font-size: 12px;
-            color: #999;
-            text-align: justify;
-        }
-
-        .container .toolbar h3 {
-            text-transform: uppercase;
-            font-size: 12px;
-            color: #555;
-        }
-
-        .container .toolbar form label {
-            display: block;
-            font-size: 11px;
-            color: #666;
-            text-transform: uppercase;
-        }
-
-        .container .toolbar form input {
-            width: 185px;
-            margin: 5px 0;
-            padding: 3px 5px;
-            font-size: 12px;
-        }
-
-        .container .query-profile {
-            margin-left: 230px;
-            padding: 10px;
-            border: 1px dashed #ccc;
-        }
-
-        .container .query-profile h1, .container .query-profile h2 {
-            margin: 0 0 10px 0;
-            border-bottom: 1px dashed #ccc;
-            font-size: 21px;
-            padding-bottom: 5px;
-            color: #555;
-            font-weight: normal;
-        }
-
-        .container .query-profile .query {
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 5px;
-            margin: 0 0 10px 0;
-        }
-
-        .container .query-profile .query label {
-            display: block;
-            font-size: 13px;
-            color: #333;
-        }
-
-        .container .query-profile .query textarea {
-            width: 100%;
-            height: 150px;
-            font-family: Courier New;
-            font-size: 14px;
-            box-sizing: border-box;
-            margin: 5px 0;
-        }
-
-        .container .query-profile .query .error {
-            display: inline-block;
-            font-size: 13px;
-            color: #b0254a;
-            width: 600px;
-            vertical-align: top;
-            margin-left: 10px;
-        }
-
-        .container .query-profile .profile {
-            margin: 10px 0;
-        }
-
-        .container .query-profile .profile.left {
-            float: left;
-            width: 300px;
-            margin-right: 20px;
-        }
-
-        .container .query-profile .profile table {
-            border-collapse: collapse;
-            border: 1px solid #ccc;
-            min-width: 300px;
-        }
-
-        .container .query-profile .profile table thead th {
-            background-color: #eee;
-            color: #333;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            text-align: left;
-            padding: 5px;
-        }
-
-        .container .query-profile .profile table tbody td {
-            color: #333;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            text-align: left;
-            padding: 5px;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" media="all" href="css/application.css" />
 </head>
 <body>
     <div class="container">
@@ -175,7 +28,6 @@
                 <h3>Connections</h3>
 
                 <div class="inner"></div>
-
             </div>
 
             <script type="text/template" id="connections_list">
@@ -186,8 +38,8 @@
                         <% if (connection) {%>
                         <li <% if (connection.get('isActive')) { %>class="active"<% } %>>
                             <a href="#" class="connect"><%= connection.title() %></a>
-                            <a href="#" class="edit">[edit]</a>
-                            <a href="#" class="remove">[remove]</a>
+                            <a href="#" class="edit control">[edit]</a>
+                            <a href="#" class="remove control">&times;</a>
                         </li>
                         <% } %>
                     <% }) %>
