@@ -29,7 +29,6 @@ var Profiler = Backbone.Router.extend({
         });
 
         queries.fetch();
-
     }
 });
 
