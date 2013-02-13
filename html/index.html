@@ -118,6 +118,16 @@
             margin: 5px 0;
         }
 
+        .container .query-profile .profile {
+            margin: 10px 0;
+        }
+
+        .container .query-profile .profile.left {
+            float: left;
+            width: 300px;
+            margin-right: 20px;
+        }
+
         .container .query-profile .profile table {
             border-collapse: collapse;
             border: 1px solid #ccc;
@@ -226,33 +236,86 @@
             <a href="#" class="btn profile">Profile Query</a>
         </script>
 
+        <script type="text/template" id="query_profiles">
+            <% if (typeof(profiles.execution_time) != 'undefined') {%>
+            <div class="profile">
+                <h2>Execution time: <b><%- profiles.execution_time %> ms</b></h2>
+            </div>
+            <% } %>
+            <% if (typeof(profiles.explain) != 'undefined') {%>
+            <div class="profile">
+                <h2>Explain</h2>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Explain</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var i = 0; i < profiles.explain.length; i++) { %>
+                    <tr>
+                        <td><%- i + 1 %></td>
+                        <td><%- profiles.explain[i].brief %></td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            <% if (typeof(profiles.profile) != 'undefined') {%>
+            <div class="profile left">
+                <h2>Profile</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var action in profiles.profile) { %>
+                    <tr>
+                        <td><%- action %></td>
+                        <td><%- profiles.profile[action] %></td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            <% if (typeof(profiles.status) != 'undefined') {%>
+            <div class="profile left">
+                <h2>Status</h2>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var variable in profiles.status) { %>
+                    <tr>
+                        <td><%- variable %></td>
+                        <td><%- profiles.status[variable] %></td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            <br clear="all" />
+        </script>
+
 
 
         <div class="query-profile">
             <div class="query"></div>
-            <div class="profiles">
-                <div class="profile">
-                    <h2>Execution time: <b>5.67 ms</b></h2>
-                </div>
-                <div class="profile">
-                    <h2>Status</h2>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Variable</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Handle_read</td>
-                                <td>189</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <div class="profiles"></div>
         </div>
     </div>
 </body>

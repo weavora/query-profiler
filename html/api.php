@@ -19,7 +19,7 @@ try {
         throw new Exception('Empty query');
     }
 
-    $connection = new \Weavora\QueryProfiler\Connection($_REQUEST['host'],$_REQUEST['databse'],$_REQUEST['user'],$_REQUEST['password']);
+    $connection = new \Weavora\QueryProfiler\Connection($_REQUEST['host'],$_REQUEST['database'],$_REQUEST['user'],$_REQUEST['password']);
     $connection->connect();
 
     $profiler = new \Weavora\QueryProfiler\Profiler();

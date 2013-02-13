@@ -24,7 +24,8 @@ var Profiler = Backbone.Router.extend({
 
         var queryProfile = new QueryProfileView({
             el: '.query-profile',
-            collection: queries
+            collection: queries,
+            connections: connections
         });
 
         queries.fetch();
