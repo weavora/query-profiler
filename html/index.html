@@ -158,7 +158,7 @@
                 <ul class="connections-list">
                     <% connections.each(function(connection){ %>
                         <% if (connection) {%>
-                        <li <% if (connection.id == active) { %>class="active"<% } %>>
+                        <li <% if (connection.get('isActive')) { %>class="active"<% } %>>
                             <a href="#" class="connect"><%= connection.title() %></a>
                             <a href="#" class="edit">[edit]</a>
                             <a href="#" class="remove">[remove]</a>

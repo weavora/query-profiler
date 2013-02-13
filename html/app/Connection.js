@@ -3,7 +3,16 @@ var Connection = Backbone.Model.extend({
         host: "localhost",
         database: "",
         user: "",
-        password: ""
+        password: "",
+        isActive: false
+    },
+
+    connect: function() {
+        this.collection.resetActive();
+        this.set('isActive', true);
+        this.save();
+
+        this.trigger('connect', this);
     },
 
     title: function() {
@@ -13,7 +22,28 @@ var Connection = Backbone.Model.extend({
 
 var Connections = Backbone.Collection.extend({
     localStorage: new Backbone.LocalStorage("connections"),
-    model: Connection
+    model: Connection,
+
+    active: function() {
+        var active = this.find(function(connection) {
+            return connection.get('isActive');
+        });
+
+        if (!active) {
+            active = new Connection();
+            active.collection = this;
+        }
+        return active;
+    },
+
+    resetActive: function() {
+        this.each(function(connection) {
+            if (connection.get('isActive')) {
+                connection.set('isActive', false);
+                connection.save();
+            }
+        });
+    }
 });
 
 var ConnectionsView = Backbone.View.extend({
@@ -32,14 +62,8 @@ var ConnectionsView = Backbone.View.extend({
         form: null
     },
 
-    active: null,
-
     getActive: function() {
-        if (!this.active) {
-            return null;
-        }
-
-        return this.collection.get(this.active);
+        return this.collection.active();
     },
 
     add: function(e) {
@@ -84,9 +108,7 @@ var ConnectionsView = Backbone.View.extend({
         var index = $(e.target).parents('li').index();
         var connection = this.collection.at(index);
 
-        this.active = connection.id;
-
-        this.renderList();
+        connection.connect();
     },
 
     save: function() {
