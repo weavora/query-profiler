@@ -1,46 +1,34 @@
 var Profiler = Backbone.Router.extend({
     routes: {
-        "dashboard": "dashboard",
-        "connection/add": "addConnection"
+
     },
 
     initialize: function(options) {
-        this.start();
+        var connections = new Connections();
+        var queries = new Queries();
 
         var connectionsView = new ConnectionsView({
             el: '.connections',
-            collection: new Connections()
+            collection: connections
         });
 
+        var favoriteQueriesView = new FavoriteQueriesView({
+            el: '.favorite-queries',
+            collection: queries
+        });
 
+        var recentQueriesView = new RecentQueriesView({
+            el: '.recent-queries',
+            collection: queries
+        });
 
-//        var connections = new Connections();
+        var queryProfile = new QueryProfileView({
+            el: '.query-profile',
+            collection: queries
+        });
 
-//        connections2.reset([
-//                    {host: "test1", database: "db1", user: "dev", password: "dev"},
-//                    {host: "test2", database: "zerebral", user: "dev", password: "dev"},
-//                    {host: "test3", database: "sems", user: "dev", password: "dev"},
-//                    {host: "test4", database: "ttm", user: "dev", password: "dev"}
-//                ]);
-//
-//        connections2.create({host: "test1", database: "db1", user: "dev", password: "dev"});
+        queries.fetch();
 
-//        console.log(this);
-//        connections.fetch();
-//        console.log(connections2.models);
-//        connections2.sync();
-    },
-
-    start: function() {
-        console.log('start');
-    },
-
-    dashboard: function() {
-        console.log('dashboard');
-    },
-
-    addConnection: function() {
-        console.log('add connection');
     }
 });
 

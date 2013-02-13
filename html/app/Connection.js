@@ -73,15 +73,9 @@ var ConnectionsView = Backbone.View.extend({
 
         this.listenTo(this.collection, "change", this.renderList);
         this.listenTo(this.collection, "remove", this.renderList);
-        this.listenTo(this.collection, "fetch", this.renderList);
+        this.listenTo(this.collection, "reset", this.renderList);
 
-        var view = this;
-        this.collection.fetch({
-            success: function() {
-                view.renderList();
-            }
-        });
-
+        this.collection.fetch();
     },
 
     connect: function(e) {
