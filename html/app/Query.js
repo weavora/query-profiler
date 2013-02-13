@@ -5,6 +5,8 @@ var Query = Backbone.Model.extend({
         updatedAt: "",
         isFavorite: false,
         isCurrent: false,
+        hasErrors: false,
+        lastError: "",
         profiles: []
     },
 
@@ -17,19 +19,11 @@ var Query = Backbone.Model.extend({
     },
 
     title: function() {
-        var name = this.get('name');
-        if (name) {
-            return name;
-        }
-        return this.cid.replace('c', 'query #');
+        return this.name();
     },
 
     name: function() {
-        var name = this.get('name');
-        if (name) {
-            return name;
-        }
-        return this.cid.replace('c', 'query #');
+        return this.get('name');
     }
 });
 
@@ -66,7 +60,7 @@ var Queries = Backbone.Collection.extend({
     createNew: function() {
         var query = new Query();
         query.collection = this;
-        query.set('name', 'query #' + this.length);
+        query.set('name', 'query #' + (this.length + 1));
         return query;
     },
 
@@ -104,6 +98,8 @@ var QueriesView = Backbone.View.extend({
 
     active: null,
 
+    emptyMessage: 'no queries',
+
     initialize: function(options) {
 
         this.templates.list = _.template($('#queries_list').html());
@@ -117,7 +113,6 @@ var QueriesView = Backbone.View.extend({
         e.preventDefault();
 
         var id = $(e.target).parents('li').data('id');
-        console.log(id);
 
         this.collection.get(id).select();
     },
@@ -129,19 +124,23 @@ var QueriesView = Backbone.View.extend({
     render: function() {
         var html = this.templates.list({
             queries: this.queries(),
-            active: this.active
+            emptyMessage: this.emptyMessage
         });
         this.$('.inner').html(html);
     }
 });
 
 var FavoriteQueriesView = QueriesView.extend({
+    emptyMessage: 'Press Favorite to stick query here.',
+
     queries: function() {
         return this.collection.favorite();
     }
 });
 
 var RecentQueriesView = QueriesView.extend({
+    emptyMessage: 'Clear setup? :) Type query and run first profile, you will see here recent queries then.',
+
     queries: function() {
         return this.collection.recent();
     }

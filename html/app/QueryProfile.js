@@ -39,7 +39,7 @@ var QueryProfileView = Backbone.View.extend({
         var query = this.collection.current();
         var name = (this.$('[name="name"]').length ? this.$('[name="name"]').val() : null);
 
-        if (!query.get('isFavorite') && sql.length && query.get('profiles')) {
+        if (!query.get('isFavorite') && !query.get('hasErrors') && sql.length && query.get('profiles')) {
             query = this.collection.findBySQL(sql);
         }
 
@@ -71,12 +71,16 @@ var QueryProfileView = Backbone.View.extend({
     },
 
     saveProfile: function(profile) {
-        if (profile.error) {
-            alert(profile.error_message);
-            return ;
-        }
         var query = this.collection.current();
-        query.set('profiles', profile.profiles);
+        if (profile.error) {
+            query.set('hasErrors', true);
+            query.set('lastError', profile.error_message);
+        } else {
+            query.set('profiles', profile.profiles);
+            query.set('hasErrors', false);
+            query.set('lastError', '');
+        }
+
         query.save();
     },
 

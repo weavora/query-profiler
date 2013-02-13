@@ -118,7 +118,7 @@ var ConnectionsView = Backbone.View.extend({
 
         if (!id) {
             this.collection.create(attributes);
-            this.active = this.collection.last().id;
+            this.collection.last().connect();
         } else {
             this.collection.get(id).save(attributes);
         }
@@ -133,9 +133,12 @@ var ConnectionsView = Backbone.View.extend({
     },
 
     renderList: function() {
+        if (this.collection.length == 0) {
+            this.renderForm(this.getActive());
+            return ;
+        }
         var html = this.templates.list({
-            connections: this.collection,
-            active: this.active
+            connections: this.collection
         });
         this.$('.inner').html(html);
     }

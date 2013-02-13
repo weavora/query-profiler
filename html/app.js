@@ -46,3 +46,9 @@ function serialize(form) {
         return object;
     }, {})
 }
+
+function ms(seconds, decimals) {
+    var decimals = decimals || 3;
+    var prefix = 1000 * Math.pow(10, decimals);
+    return (Math.round(parseFloat(seconds) * 1000 * prefix) / prefix).toFixed(decimals);
+}
