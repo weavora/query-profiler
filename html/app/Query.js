@@ -1,6 +1,7 @@
 var Query = Backbone.Model.extend({
     defaults: {
         query: "",
+        name: "",
         updatedAt: "",
         isFavorite: false,
         isCurrent: false,
@@ -16,10 +17,18 @@ var Query = Backbone.Model.extend({
     },
 
     title: function() {
+        var name = this.get('name');
+        if (name) {
+            return name;
+        }
         return this.cid.replace('c', 'query #');
     },
 
     name: function() {
+        var name = this.get('name');
+        if (name) {
+            return name;
+        }
         return this.cid.replace('c', 'query #');
     }
 });
@@ -29,11 +38,18 @@ var Queries = Backbone.Collection.extend({
     model: Query,
 
     recent: function() {
-        return this.last(5).reverse();
+        var queries = this.filter(function(query) {
+            return !query.get('isFavorite');
+        });
+        queries = _.last(queries, 10);
+        return queries.reverse();
     },
 
     favorite: function() {
-        return this.last(5).reverse();
+        var queries = this.filter(function(query) {
+            return query.get('isFavorite');
+        });
+        return queries.reverse();
     },
 
     current: function() {
@@ -42,10 +58,16 @@ var Queries = Backbone.Collection.extend({
         });
 
         if (!current) {
-            current = new Query();
-            current.collection = this;
+            current = this.createNew();
         }
         return current;
+    },
+
+    createNew: function() {
+        var query = new Query();
+        query.collection = this;
+        query.set('name', 'query #' + this.length);
+        return query;
     },
 
     resetCurrent: function() {
@@ -54,6 +76,18 @@ var Queries = Backbone.Collection.extend({
                 query.set('isCurrent', false);
                 query.save();
             }
+        });
+    },
+
+    findBySQL: function(sql) {
+        var hash = function(sql) {
+            return sql.replace(/\s/g,'').toLowerCase();
+        }
+
+        var queryHash = hash(sql);
+
+        return this.find(function(query) {
+            return hash(query.get('query')) == queryHash;
         });
     }
 });
@@ -82,10 +116,10 @@ var QueriesView = Backbone.View.extend({
     profile: function(e) {
         e.preventDefault();
 
-        var connection = $(e.target).parents('li');
-        var index = this.collection.length - connection.index() - 1;
+        var id = $(e.target).parents('li').data('id');
+        console.log(id);
 
-        this.collection.at(index).select();
+        this.collection.get(id).select();
     },
 
     queries: function() {

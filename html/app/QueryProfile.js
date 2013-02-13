@@ -1,7 +1,8 @@
 var QueryProfileView = Backbone.View.extend({
 
     events: {
-        "click .query .profile": "profile"
+        "click .query .profile": "profile",
+        "click .query .favorite": "favorite"
     },
 
     templates: {
@@ -24,18 +25,39 @@ var QueryProfileView = Backbone.View.extend({
         this.render();
     },
 
+    favorite: function(e) {
+        e.preventDefault();
+        var query = this.collection.current();
+
+        $('.query h1').html('<input type="text" name="name" value="' + query.name() + '" />');
+    },
+
     profile: function(e) {
         e.preventDefault();
 
+        var sql = this.$('[name="query"]').val();
         var query = this.collection.current();
-        query.set('query', this.$('[name="query"]').val());
-        query.select();
+        var name = (this.$('[name="name"]').length ? this.$('[name="name"]').val() : null);
+
+        if (!query.get('isFavorite') && sql.length && query.get('profiles')) {
+            query = this.collection.findBySQL(sql);
+        }
+
+        if (!query) {
+            query = this.collection.createNew();
+        }
 
         if (!query.id) {
             this.collection.add(query);
-        } else {
-            query.save();
         }
+
+        if (name) {
+            query.set('isFavorite', true);
+            query.set('name', name);
+        }
+
+        query.set('query', sql);
+        query.select();
 
         var connection = this.connections.active();
         $.get('api.php', {

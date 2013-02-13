@@ -218,7 +218,7 @@
                 <ul class="queries-list">
                     <% _.each(queries, function(query){ %>
                         <% if (query) {%>
-                        <li <% if (query.get('isCurrent')) { %>class="active"<% } %>>
+                        <li <% if (query.get('isCurrent')) { %>class="active"<% } %> data-id="<%- query.id %>">
                             <a href="#" class="profile"><%= query.title() %></a>
                         </li>
                         <% } %>
@@ -228,7 +228,7 @@
         </div>
 
         <script type="text/template" id="query_details">
-            <h1><%- query.name() %></h1>
+            <h1><%- query.name() %> <a href="#" class="favorite">[favorite]</a></h1>
 
             <label for="query">Query:</label>
             <textarea name="query" id="query"><%- query.get('query') %></textarea>
