@@ -2,9 +2,10 @@
     font-family: Arial;
 }
 
-body {
+html, body {
     padding: 0;
     margin: 0;
+    height: 100%;
 }
 
 .btn {
@@ -14,25 +15,27 @@ body {
     padding: 3px 10px;
     color: #fff;
     background: #ccc;
-    text-shadow: 1px 1px 0 #b0b0b0;
+    text-shadow: 1px 1px 0 #999;
 }
 
 .container {
-
+    display: table-row;
 }
 
 .container .toolbar {
-    float: left;
+    display: table-cell;
     width: 200px;
     padding: 10px;
     border-right: 1px solid #b0b0b0;
 
     background-color: #f0f0f0;
+    height: 100%;
 }
 
 .container .toolbar ul {
     list-style: none;
     padding: 0;
+    width: 200px;
 }
 
 .container .toolbar ul li {
@@ -40,7 +43,7 @@ body {
 }
 
 .container .toolbar ul li.active {
-    background-color: #eee;
+
 }
 
 .container .toolbar ul a {
@@ -75,6 +78,31 @@ body {
     background: transparent url(../img/database_active.png) no-repeat 0 3px;
 }
 
+.container .toolbar .queries-list li.active {
+    width: 204px;
+    background-color: #9dacba;
+    margin-left: -10px;
+    padding-left: 13px;
+}
+
+.container .toolbar .queries-list li:hover {
+    width: 204px;
+    background-color: #ddd;
+    margin-left: -10px;
+    padding-left: 13px;
+}
+
+.container .toolbar .queries-list li:hover a {
+    color: #333 !important;
+    text-shadow: 0px 1px 0 #fff !important;
+}
+
+
+.container .toolbar .queries-list li.active a {
+    text-shadow: 1px 1px 0 #555;
+    color: #fff
+}
+
 .container .toolbar .note {
     font-size: 12px;
     color: #999;
@@ -95,7 +123,7 @@ body {
     text-transform: uppercase;
 }
 
-.container .toolbar form input {
+.container .toolbar form input[type="text"], .container .toolbar form input[type="password"] {
     width: 185px;
     margin: 5px 0;
     padding: 3px 5px;
@@ -103,23 +131,47 @@ body {
 }
 
 .container .query-profile {
-    margin-left: 230px;
-    padding: 10px;
-    border: 1px dashed #ccc;
+    /*padding: 10px 10px 10px 20px;*/
+    display: table-cell;
+    width: 100%;
+    vertical-align: top;
 }
 
-.container .query-profile h1, .container .query-profile h2 {
-    margin: 0 0 10px 0;
-    border-bottom: 1px dashed #ccc;
+.container .query-profile .favorite {
+    text-indent: -9999px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: transparent url(../img/favorite.png) no-repeat 0 4px;
+    vertical-align: top;
+    padding-top: 4px;
+}
+
+.container .query-profile .favorite.active {
+    background-image: url(../img/favorite_active.png);
+}
+
+.container .query-profile h1 {
+    margin: 0;
+    border-bottom: 1px solid #b0b0b0;
     font-size: 21px;
+    padding: 5px 10px;
+    color: #333;
+    font-weight: normal;
+    background-color: #f9f9f9;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.container .query-profile h2 {
+    margin: 0;
+    font-size: 16px;
     padding-bottom: 5px;
     color: #555;
     font-weight: normal;
 }
 
 .container .query-profile .query {
-    border-bottom: 1px dashed #ccc;
-    padding-bottom: 5px;
+    border-bottom: 1px solid #b0b0b0;
     margin: 0 0 10px 0;
 }
 
@@ -135,7 +187,27 @@ body {
     font-family: Courier New;
     font-size: 14px;
     box-sizing: border-box;
-    margin: 5px 0;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #b0b0b0;
+    padding: 10px;
+    display: block;
+}
+
+.container .query-profile .query input {
+    font-size: 13px;
+    line-height: 15px;
+    padding: 3px 5px;
+    color: #333;
+    width: 400px;
+    margin: 0;
+    border: 1px dashed #b0b0b0;
+    vertical-align: top;
+}
+
+.container .query-profile .query .controls {
+    padding: 12px;
+    background-color: #f9f9f9;
 }
 
 .container .query-profile .query .error {
@@ -147,8 +219,14 @@ body {
     margin-left: 10px;
 }
 
-.container .query-profile .profile {
-    margin: 10px 0;
+.container .query-profile .query .execution-time {
+    font-size: 13px;
+    margin-left: 10px;
+    color: #333;
+}
+
+.container .query-profile div.profile {
+    margin: 10px;
 }
 
 .container .query-profile .profile.left {

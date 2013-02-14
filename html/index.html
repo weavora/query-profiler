@@ -62,7 +62,8 @@
 
                     <input type="hidden" name="id" value="<%- connection.id %>"  />
 
-                    <a href="#" class="btn save">Connect</a>
+                    <input type="submit" value="Connect" class="btn save"/>
+
                     <a href="#" class="btn cancel">Cancel</a>
                 </form>
             </script>
@@ -98,98 +99,106 @@
                 <% } %>
             </script>
         </div>
+        <div class="query-profile">
+            <script type="text/template" id="query_details">
+                <h1><a href="#" class="favorite <%if (query.get('isFavorite')) {%>active <%}%>">[favorite]</a> <%- query.name() %></h1>
 
-        <script type="text/template" id="query_details">
-            <h1><%- query.name() %> <a href="#" class="favorite">[favorite]</a></h1>
+                <!--<label for="query">Query:</label>-->
+                <textarea name="query" id="query"><%- query.get('query') %></textarea>
+                <div class="controls">
+                    <a href="#" class="btn profile">Profile Query</a>
 
-            <label for="query">Query:</label>
-            <textarea name="query" id="query"><%- query.get('query') %></textarea>
-
-            <a href="#" class="btn profile">Profile Query</a>
-
-            <% if (query.get('hasErrors')) {%>
-                <span class="error"><%- query.get('lastError') %></span>
-            <% } %>
-        </script>
-
-        <script type="text/template" id="query_profiles">
-            <% if (typeof(profiles.execution_time) != 'undefined') {%>
-            <div class="profile">
-                <h2>Execution time: <b><%- ms(profiles.execution_time) %> ms</b></h2>
-            </div>
-            <% } %>
-            <% if (typeof(profiles.explain) != 'undefined') {%>
-            <div class="profile">
-                <h2>Explain</h2>
-
-                <table>
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Explain</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% for(var i = 0; i < profiles.explain.length; i++) { %>
-                    <tr>
-                        <td><%- i + 1 %></td>
-                        <td><%- profiles.explain[i].brief %></td>
-                    </tr>
+                    <% if (query.get('hasErrors')) {%>
+                    <span class="error"><%- query.get('lastError') %></span>
                     <% } %>
-                    </tbody>
-                </table>
-            </div>
-            <% } %>
-            <% if (typeof(profiles.profile) != 'undefined') {%>
-            <div class="profile left">
-                <h2>Profile</h2>
 
-                <table>
-                    <thead>
+                    <% if (query.get('profiles').execution_time && !query.get('hasErrors')) {%>
+                    <span class="execution-time">Execution time: <b><%- ms(query.get('profiles').execution_time) %> ms</b></span>
+                    <% } %>
+                </div>
+            </script>
+
+            <script type="text/template" id="query_profiles">
+
+                <% if (typeof(profiles.explain) != 'undefined') {%>
+                <div class="profile">
+                    <h2>Explain</h2>
+
+                    <table style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Select Type</th>
+                            <th>Table</th>
+                            <th>Type</th>
+                            <th>Key</th>
+                            <th>Rows</th>
+                            <th>Extra</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for(var i = 0; i < profiles.explain.length; i++) { %>
+                        <tr>
+                            <td><%- i + 1 %></td>
+                            <td><%- profiles.explain[i].select_type %></td>
+                            <td><%- profiles.explain[i].table %></td>
+                            <td><%- profiles.explain[i].type %></td>
+                            <td><% if(profiles.explain[i].key) { %><%- profiles.explain[i].key %>:<%- profiles.explain[i].key_len %><% } %></td>
+                            <td><%- profiles.explain[i].rows %></td>
+                            <td><%- profiles.explain[i].extra %></td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+                <% if (typeof(profiles.status) != 'undefined') {%>
+                <div class="profile left">
+                    <h2>Status</h2>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for(var variable in profiles.status) { %>
+                        <tr>
+                            <td><%- variable %></td>
+                            <td><%- profiles.status[variable] %></td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+                <% if (typeof(profiles.profile) != 'undefined') {%>
+                <div class="profile left">
+                    <h2>Profile</h2>
+
+                    <table>
+                        <thead>
                         <tr>
                             <th>Step</th>
                             <th>Duration</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                    <% for(var action in profiles.profile) { %>
-                    <tr>
-                        <td><%- action %></td>
-                        <td><%- ms(profiles.profile[action]) %> ms</td>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
-            </div>
-            <% } %>
-            <% if (typeof(profiles.status) != 'undefined') {%>
-            <div class="profile left">
-                <h2>Status</h2>
+                        </thead>
+                        <tbody>
+                        <% for(var action in profiles.profile) { %>
+                        <tr>
+                            <td><%- action %></td>
+                            <td><%- ms(profiles.profile[action]) %> ms</td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
 
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Variable</th>
-                        <th>Count</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% for(var variable in profiles.status) { %>
-                    <tr>
-                        <td><%- variable %></td>
-                        <td><%- profiles.status[variable] %></td>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
-            </div>
-            <% } %>
-            <br clear="all" />
-        </script>
-
-
-
-        <div class="query-profile">
+                <br clear="all" />
+            </script>
             <div class="query"></div>
             <div class="profiles"></div>
         </div>

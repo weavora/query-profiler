@@ -50,11 +50,12 @@ var ConnectionsView = Backbone.View.extend({
 
     events: {
         "click .add": "add",
-        "click .save": "save",
+//        "click .save": "save",
         "click .edit": "edit",
         "click .remove": "remove",
         "click .cancel": "renderList",
-        "click .connect": "connect"
+        "click .connect": "connect",
+        "submit form": "save"
     },
 
     templates: {
@@ -83,11 +84,13 @@ var ConnectionsView = Backbone.View.extend({
     remove: function(e) {
         e.preventDefault();
 
-        var index = $(e.target).parents('li').index();
-        var connection = this.collection.at(index);
-        connection.destroy();
+        if (confirm('Are you sure want to delete this connection?')) {
+            var index = $(e.target).parents('li').index();
+            var connection = this.collection.at(index);
+            connection.destroy();
 
-        this.collection.remove(connection);
+            this.collection.remove(connection);
+        }
     },
 
     initialize: function(options) {
@@ -111,7 +114,9 @@ var ConnectionsView = Backbone.View.extend({
         connection.connect();
     },
 
-    save: function() {
+    save: function(e) {
+        e.preventDefault();
+
         var attributes = serialize(this.$('form'));
         var id = attributes.id;
         delete attributes.id;

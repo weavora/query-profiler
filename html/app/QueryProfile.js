@@ -29,7 +29,12 @@ var QueryProfileView = Backbone.View.extend({
         e.preventDefault();
         var query = this.collection.current();
 
-        $('.query h1').html('<input type="text" name="name" value="' + query.name() + '" />');
+        if (query.get('isFavorite')) {
+            query.set('isFavorite', false);
+            query.save();
+        } else {
+            $('.query h1').html('<input type="text" name="name" autofocus="on" value="' + query.name() + '" />');
+        }
     },
 
     profile: function(e) {

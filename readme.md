@@ -2,10 +2,15 @@
 
 ## Roadmap
 
-1. UI: Unpin favorite queries
-2. UI: Compare with
-3. Single page build script
-4. Symfony profiler integration
-5. Profiler: mysql performance schema
-6. UI: connection delete confirm
-7. UI: favorite query save or create new
+Features:
+
+1. Compare queries
+2. Server status monitor
+3. Symfony Profiler integration
+4. MySQL >5.5 Performance schema
+5. SQL syntax highlight
+
+Issues:
+
+1. UI: favorite query save or create new
+2. UI: profile show spinner on button during ajax request

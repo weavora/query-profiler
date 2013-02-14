@@ -30,7 +30,7 @@ class StatusExtension extends Extension
     {
         $profile = array();
         foreach($this->status as $variable) {
-            if ($this->isValidVariable($variable['Variable_name'])) {
+            if ($this->isValidVariable($variable['Variable_name']) && $variable['Value'] > 0) {
                 $profile[strtolower($variable['Variable_name'])] = $variable['Value'];
             }
 
