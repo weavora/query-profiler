@@ -115,6 +115,19 @@
                     <% if (query.get('profiles').execution_time && !query.get('hasErrors')) {%>
                     <span class="execution-time">Execution time: <b><%- ms(query.get('profiles').execution_time) %> ms</b></span>
                     <% } %>
+
+                    <% if (!query.get('hasErrors') && query.get('profiles').execution_time && queries.favorite().length) {%>
+                    <span class="compare-with">
+                        <a href="#" class="btn compare">Compare with:</a>
+                        <select>
+                            <% _.each(queries.favorite(), function(compareQuery) {%>
+                                <% if (compareQuery.id != query.id && !compareQuery.get('hasErrors') && compareQuery.get('profiles').status) { %>
+                                    <option value="<%- compareQuery.id %>"><%- compareQuery.name() %></option>
+                                <% } %>
+                            <% }) %>
+                        </select>
+                    </span>
+                    <% } %>
                 </div>
             </script>
 
@@ -198,6 +211,42 @@
                 <% } %>
 
                 <br clear="all" />
+            </script>
+
+            <script type="text/template" id="query_compare">
+                <div class="profile">
+                    <h2>Compare with <%- appositeQuery.name() %></h2>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th><%- query.title() %></th>
+                            <th><%- appositeQuery.title() %></th>
+                            <th>Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Execution time</td>
+                                <td><%- ms(query.get('profiles').execution_time) %> ms</td>
+                                <td><%- ms(appositeQuery.get('profiles').execution_time) %> ms</td>
+
+                                <% var diffValue = diff(ms(query.get('profiles').execution_time), ms(appositeQuery.get('profiles').execution_time)) %>
+                                <td class="<%- diffResult(diffValue) %>"><%- diffValue  %> ms</td>
+                            </tr>
+                            <% _.each(statuses, function(status) { %>
+                            <tr>
+                                <td><%- status %></td>
+                                <td><%- queryStatus[status] %></td>
+                                <td><%- appositeQueryStatus[status] %></td>
+                                <% var diffValue = diff(queryStatus[status] - appositeQueryStatus[status]) %>
+                                <td class="<%- diffResult(diffValue) %>"><%- diffValue %></td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
             </script>
             <div class="query"></div>
             <div class="profiles"></div>

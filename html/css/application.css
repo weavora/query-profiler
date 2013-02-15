@@ -225,6 +225,11 @@ html, body {
     color: #333;
 }
 
+.container .query-profile .query .compare-with {
+    display: inline-block;
+    margin-left: 50px;
+}
+
 .container .query-profile div.profile {
     margin: 10px;
 }
@@ -256,4 +261,14 @@ html, body {
     border: 1px solid #ccc;
     text-align: left;
     padding: 5px;
+}
+
+.container .query-profile .profile table tbody td.up {
+    color: #b0254a;
+    /*font-weight: bold;*/
+}
+
+.container .query-profile .profile table tbody td.down {
+    color: #4ab03a;
+    /*font-weight: bold;*/
 }

@@ -4,11 +4,11 @@
 
 Features:
 
-1. Compare queries
-2. Server status monitor
-3. Symfony Profiler integration
-4. MySQL >5.5 Performance schema
-5. SQL syntax highlight
+1. Server status monitor
+2. Symfony Profiler integration
+3. MySQL >5.5 Performance schema
+4. SQL syntax highlight
+5. SQL autoformat
 
 Issues:
 
