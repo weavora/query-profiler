@@ -11,6 +11,8 @@
     <script src="js/underscore.js"></script>
     <script src="js/backbone.js"></script>
     <script src="js/backbone.localstorage.js"></script>
+    <script src="js/codemirror.js"></script>
+    <script src="js/codemirror.sql.js"></script>
 
 
     <script src="app/Connection.js"></script>
@@ -20,6 +22,7 @@
     <script src="bootstrap.js"></script>
 
     <link type="text/css" rel="stylesheet" media="all" href="css/application.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/codemirror.css" />
 </head>
 <body>
     <div class="container">
@@ -106,7 +109,7 @@
                 <h1><a href="#" class="favorite <%if (query.get('isFavorite')) {%>active <%}%>">[favorite]</a> <%- query.name() %></h1>
 
                 <!--<label for="query">Query:</label>-->
-                <textarea name="query" id="query"><%- query.get('query') %></textarea>
+                <textarea name="query" id="query"><%- query.get('query').replace(/\,[^\s]/g,', ') %></textarea>
                 <div class="controls">
                     <a href="#" class="btn profile">Profile Query</a>
 

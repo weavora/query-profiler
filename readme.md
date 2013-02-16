@@ -4,13 +4,7 @@
 
 Features:
 
-1. SQL syntax highlight
-2. SQL autoformat
-3. Server status monitor
-4. Symfony Profiler integration
-5. MySQL >5.5 Performance schema
-
-
-Issues:
-
-1. UI: profile show spinner on button during ajax request
+1. SQL autoformat
+2. Server status monitor
+3. Symfony Profiler integration
+4. MySQL >5.5 Performance schema

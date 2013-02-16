@@ -13,6 +13,8 @@ var QueryProfileView = Backbone.View.extend({
     },
 
     connections: null,
+    editor: null,
+    lock: false,
 
     initialize: function(options) {
         this.templates.details = _.template($('#query_details').html());
@@ -24,8 +26,6 @@ var QueryProfileView = Backbone.View.extend({
         this.listenTo(this.collection, "reset", this.render);
 
         this.connections = options.connections;
-
-//        this.render();
     },
 
     favorite: function(e) {
@@ -42,8 +42,9 @@ var QueryProfileView = Backbone.View.extend({
 
     profile: function(e) {
         e.preventDefault();
+        this.lock = true;
 
-        var sql = this.$('[name="query"]').val();
+        var sql = this.editor.getValue();
         var query = this.collection.current();
         var name = (this.$('[name="name"]').length ? this.$('[name="name"]').val() : null);
 
@@ -59,6 +60,7 @@ var QueryProfileView = Backbone.View.extend({
         query.set('query', sql);
         query.select();
 
+        $(e.target).html('Profiling...');
 
         var connection = this.connections.active();
         $.get('api.php', {
@@ -71,6 +73,7 @@ var QueryProfileView = Backbone.View.extend({
     },
 
     saveProfile: function(profile) {
+        this.lock = false;
         var query = this.collection.current();
         if (profile.error_message) {
             query.set('hasErrors', true);
@@ -82,6 +85,7 @@ var QueryProfileView = Backbone.View.extend({
         }
 
         query.save();
+        query.trigger('change');
     },
 
     compare: function(e) {
@@ -107,19 +111,36 @@ var QueryProfileView = Backbone.View.extend({
     },
 
     render: function() {
-        var query = this.collection.current();
-        var queryDetails = this.templates.details({
-            query: this.collection.current(),
-            queries: this.collection
-        });
-        this.$('.query').html(queryDetails);
-
-        var queryProfiles = '';
-        if (query.get('profiles')) {
-            queryProfiles = this.templates.profiles({
-                profiles: query.get('profiles')
+        if (!this.lock) {
+            var query = this.collection.current();
+            var queryDetails = this.templates.details({
+                query: this.collection.current(),
+                queries: this.collection
             });
+            this.$('.query').html(queryDetails);
+
+            var queryProfiles = '';
+            if (query.get('profiles')) {
+                queryProfiles = this.templates.profiles({
+                    profiles: query.get('profiles')
+                });
+            }
+            this.$('.profiles').html(queryProfiles);
+
+            this.bindEditor();
         }
-        this.$('.profiles').html(queryProfiles);
+    },
+
+    bindEditor: function() {
+        this.editor = CodeMirror.fromTextArea(this.$('.query textarea').get(0), {
+            mode: 'text/x-mysql',
+            lineWrapping: true,
+//            lineNumbers: true,
+            theme: 'profiler',
+            matchBrackets : true,
+            autofocus: true,
+            fixedGutter: false,
+            tabSize: 2
+        });
     }
 });
