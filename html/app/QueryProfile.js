@@ -63,7 +63,7 @@ var QueryProfileView = Backbone.View.extend({
         $(e.target).html('Profiling...');
 
         var connection = this.connections.active();
-        $.get('api.php', {
+        $.post('api.php', {
             host: connection.get('host'),
             database: connection.get('database'),
             user: connection.get('user'),
