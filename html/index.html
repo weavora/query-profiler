@@ -121,14 +121,12 @@
                     <span class="execution-time">Execution time: <b><%- ms(query.get('profiles').execution_time) %> ms</b></span>
                     <% } %>
 
-                    <% if (!query.get('hasErrors') && query.get('profiles').execution_time && queries.favorite().length) {%>
+                    <% if (!query.get('hasErrors') && query.get('profiles').execution_time && query.appositeQueries().length) {%>
                     <span class="compare-with">
                         <a href="#" class="btn compare">Compare with:</a>
                         <select>
-                            <% _.each(queries.favorite(), function(compareQuery) {%>
-                                <% if (compareQuery.id != query.id && !compareQuery.get('hasErrors') && compareQuery.get('profiles').status) { %>
-                                    <option value="<%- compareQuery.id %>"><%- compareQuery.name() %></option>
-                                <% } %>
+                            <% _.each(query.appositeQueries(), function(appositeQuery) {%>
+                                <option value="<%- appositeQuery.id %>"><%- appositeQuery.name() %></option>
                             <% }) %>
                         </select>
                     </span>

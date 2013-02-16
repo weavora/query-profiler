@@ -24,6 +24,13 @@ var Query = Backbone.Model.extend({
 
     name: function() {
         return this.get('name');
+    },
+
+    appositeQueries: function() {
+        var self = this;
+        return this.collection.filter(function(query) {
+            return self.id != query.id && !query.get('hasErrors') && query.get('profiles').status && query.get('isFavorite');
+        })
     }
 });
 
