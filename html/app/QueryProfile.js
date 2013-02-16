@@ -25,7 +25,7 @@ var QueryProfileView = Backbone.View.extend({
 
         this.connections = options.connections;
 
-        this.render();
+//        this.render();
     },
 
     favorite: function(e) {
@@ -47,25 +47,18 @@ var QueryProfileView = Backbone.View.extend({
         var query = this.collection.current();
         var name = (this.$('[name="name"]').length ? this.$('[name="name"]').val() : null);
 
-        if (!query.get('isFavorite') && !query.get('hasErrors') && sql.length && query.get('profiles')) {
-            query = this.collection.findBySQL(sql);
-        }
-
-        if (!query) {
-            query = this.collection.createNew();
-        }
-
         if (!query.id) {
             this.collection.add(query);
+            query.select();
         }
 
         if (name) {
             query.set('isFavorite', true);
             query.set('name', name);
         }
-
         query.set('query', sql);
         query.select();
+
 
         var connection = this.connections.active();
         $.get('api.php', {
@@ -75,12 +68,11 @@ var QueryProfileView = Backbone.View.extend({
             password: connection.get('password'),
             query: query.get('query')
         }, $.proxy(this, 'saveProfile'), 'json');
-
     },
 
     saveProfile: function(profile) {
         var query = this.collection.current();
-        if (profile.error) {
+        if (profile.error_message) {
             query.set('hasErrors', true);
             query.set('lastError', profile.error_message);
         } else {

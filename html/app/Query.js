@@ -71,18 +71,6 @@ var Queries = Backbone.Collection.extend({
                 query.save();
             }
         });
-    },
-
-    findBySQL: function(sql) {
-        var hash = function(sql) {
-            return sql.replace(/\s/g,'').toLowerCase();
-        }
-
-        var queryHash = hash(sql);
-
-        return this.find(function(query) {
-            return hash(query.get('query')) == queryHash;
-        });
     }
 });
 
@@ -124,14 +112,14 @@ var QueriesView = Backbone.View.extend({
     render: function() {
         var html = this.templates.list({
             queries: this.queries(),
-            emptyMessage: this.emptyMessage
+            emptyMessage: '<p>' + this.emptyMessage + '</p>'
         });
         this.$('.inner').html(html);
     }
 });
 
 var FavoriteQueriesView = QueriesView.extend({
-    emptyMessage: 'Press Favorite to stick query here.',
+    emptyMessage: 'Press star near query name to stick query here.',
 
     queries: function() {
         return this.collection.favorite();
@@ -141,7 +129,21 @@ var FavoriteQueriesView = QueriesView.extend({
 var RecentQueriesView = QueriesView.extend({
     emptyMessage: 'Clear setup? :) Type query and run first profile, you will see here recent queries then.',
 
+    events: {
+        "click .profile": "profile",
+        "click .add": "add"
+    },
+
     queries: function() {
         return this.collection.recent();
+    },
+
+    add: function(e) {
+        e.preventDefault();
+
+        var query = this.collection.createNew();
+        this.collection.add(query);
+        query.select();
+
     }
 });
